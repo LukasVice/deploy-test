@@ -16,11 +16,7 @@ pipeline {
                 sh 'echo Success'
                 
                 script {
-                    if (pullRequest.mergeable) {
-                        echo "Mergeable"
-                    } else {
-                        echo "Not mergeable"
-                    }
+                    echo "Mergeable: ${pullRequest.mergeable}"
                 }
             }
         }
