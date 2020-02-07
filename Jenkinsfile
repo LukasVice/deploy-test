@@ -16,9 +16,9 @@ pipeline {
                 sh 'echo Success'
                 
                 script {
-                    echo "State: ${pullRequest.state}"
                     echo "Url: ${pullRequest.url}"
-                    echo "Statuses: ${pullRequest.statuses[0]}"
+                    echo "State: ${pullRequest.state}"
+                    echo "Statuses: ${pullRequest.statuses}"
                     echo "Mergeable: ${pullRequest.mergeable}"
                 }
             }
