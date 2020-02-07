@@ -18,7 +18,7 @@ pipeline {
                 script {
                     echo "Url: ${pullRequest.url}"
                     echo "State: ${pullRequest.state}"
-                    echo "Statuses: ${pullRequest.statuses}"
+                    echo "Statuses: ${pullRequest.statuses[0].state}"
                     echo "Mergeable: ${pullRequest.mergeable}"
                 }
             }
