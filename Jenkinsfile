@@ -16,6 +16,7 @@ pipeline {
                 sh 'echo Success'
                 
                 script {
+                    echo "State: ${pullRequest.state}"
                     echo "Mergeable: ${pullRequest.mergeable}"
                 }
             }
