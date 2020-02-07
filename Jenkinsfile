@@ -14,6 +14,10 @@ pipeline {
         stage('build') {
             steps {
                 sh 'echo Success'
+                
+                script {
+                    echo "Mergeable: ${pullRequest.mergeable}"
+                }
             }
         }
     }
