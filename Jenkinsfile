@@ -8,6 +8,8 @@ pipeline {
     
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
+        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
+        booleanParam(defaultValue: false, description: '', name: '')
     }
     
     stages {
