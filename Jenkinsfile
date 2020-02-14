@@ -25,7 +25,7 @@ pipeline {
                         returnStdout: true
                     )
                     if (!mergeable.toBoolean()) {
-                        error('Pull request is not mergeable!')
+                        echo 'Pull request is not mergeable!'
                     }
                 }
             }
