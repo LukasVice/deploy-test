@@ -1,22 +1,32 @@
 pipeline {
     agent any
-    
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds()
     }
-    
+
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
         booleanParam(defaultValue: false, description: '', name: null)
     }
-    
+
+    environment {
+        GITHUB_TOKEN = credentials('ae612607-f01d-43b3-8b51-77beb598b215')
+    }
+
     stages {
+        stage('check') {
+            steps {
+                sh 'docker run --rm -it -v $(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c "hub api repos/{owner}/{repo}/pulls/3 -t | awk \"/^\\.mergeable\\t/ { print \\\$2 }\""'
+            }
+        }
+
         stage('build') {
             steps {
                 sh 'echo Success'
-                
+
                 script {
                     echo "Url: ${pullRequest.url}"
                     echo "State: ${pullRequest.state}"
