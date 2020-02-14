@@ -20,6 +20,9 @@ pipeline {
         stage('check') {
             steps {
                 script {
+                    echo "env.CHANGE_ID = ${env.CHANGE_ID}"
+                    echo "CHANGE_ID = ${CHANGE_ID}"
+                    echo "pullRequest = ${pullRequest.id}"
                     def mergeable = sh(
                         script: 'docker run --rm -v $(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c "hub api repos/{owner}/{repo}/pulls/3 -t | awk \\"/^\\\\.mergeable\\\\t/ { print \\\\\\$2 }\\""',
                         returnStdout: true
