@@ -9,6 +9,13 @@ pipeline {
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
+        ChoiceParameter(
+            choiceType: 'PT_CHECKBOX',
+            description: 'Environments',
+            name: 'ENVIRONMENTS',
+            randomName: 'choice-parameter-24337380323626316',
+            script: [$class: 'GroovyScript', script: [classpath: [], sandbox: true, script: 'return BRANCH_NAME == \'master\' ? [\'Staging\', \'Live\'] : [\'Staging\']']]
+        )
     }
 
     environment {
