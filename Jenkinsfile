@@ -20,30 +20,13 @@ pipeline {
         stage('check') {
             steps {
                 script {
-                    echo "env.CHANGE_ID = ${env.CHANGE_ID}"
-                    echo "CHANGE_ID = ${CHANGE_ID}"
-                    echo "pullRequest = ${pullRequest.id}"
                     def mergeable = sh(
                         script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$CHANGE_ID -t | awk \\\"/^\\\\.mergeable\\\\t/ { print \\\\\\\$2 }\\\"\"",
                         returnStdout: true
                     )
                     if (!mergeable.toBoolean()) {
-                        echo 'Pull request is not mergeable!'
+                        error('Pull request is not mergeable!')
                     }
-                }
-            }
-        }
-
-        stage('build') {
-            steps {
-                sh 'echo Success'
-
-                script {
-                    echo "Url: ${pullRequest.url}"
-                    echo "State: ${pullRequest.state}"
-                    echo "Statuses: ${pullRequest.statuses[0].state}"
-                    echo "Mergeable: ${pullRequest.mergeable}"
-                    echo "Merged: ${pullRequest.merged}"
                 }
             }
         }
