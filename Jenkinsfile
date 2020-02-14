@@ -6,11 +6,12 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    parameters {
-        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
-        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
-        activeChoiceParam(name: 'States', choiceType: 'SINGLE_SELECT')
-    }
+    properties([
+    parameters([
+        [$class: 'ChoiceParameter', choiceType: 'PT_SINGLE_SELECT', description: 'Select a choice', filterLength: 1, filterable: true, name: 'choice1', randomName: 'choice-parameter-7601235200970', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: 'return ["ERROR"]'], script: [classpath: [], sandbox: false, script: 'return[\'aaa\',\'bbb\']']]],
+        [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', description: 'Active Choices Reactive parameter', filterLength: 1, filterable: true, name: 'choice2', randomName: 'choice-parameter-7601237141171', referencedParameters: 'choice1', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], script: [classpath: [], sandbox: false, script: 'if(choice1.equals("aaa")){return [\'a\', \'b\']} else {return [\'aaaaaa\',\'fffffff\']}']]]
+    ])
+])
 
     environment {
         GITHUB_TOKEN = credentials('ae612607-f01d-43b3-8b51-77beb598b215')
