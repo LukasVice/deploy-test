@@ -1,13 +1,8 @@
-def buildEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
+def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
 
 properties([
     parameters([
-        extendedChoice(
-            description: 'Environments to build',
-            name: 'ENVIRONMENTS',
-            type: 'PT_CHECKBOX',
-            value: buildEnvironments
-        )
+        extendedChoice(name: 'DEPLOY_TO', type: 'PT_CHECKBOX', value: deployEnvironments)
     ])
 ])
 
@@ -17,6 +12,10 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds()
+    }
+
+    parameters {
+        extendedChoice(name: 'DEPLOY_TO', type: 'PT_CHECKBOX', value: deployEnvironments)
     }
 
     environment {
