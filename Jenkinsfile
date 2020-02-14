@@ -1,11 +1,5 @@
 def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
 
-properties([
-    parameters([
-        extendedChoice(name: 'DEPLOY_TO', type: 'PT_CHECKBOX', value: deployEnvironments)
-    ])
-])
-
 pipeline {
     agent any
 
