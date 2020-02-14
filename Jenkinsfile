@@ -9,7 +9,7 @@ pipeline {
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
-        ChoiceParameter(
+        choice(
             choiceType: 'PT_CHECKBOX',
             description: 'Environments',
             name: 'ENVIRONMENTS',
