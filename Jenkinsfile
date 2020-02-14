@@ -23,7 +23,9 @@ pipeline {
                         script: 'docker run --rm -v $(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c "hub api repos/{owner}/{repo}/pulls/3 -t | awk \\"/^\\\\.mergeable\\\\t/ { print \\\\\\$2 }\\""',
                         returnStdout: true
                     )
-                    println mergeable
+                    if (!mergeable.toBoolean()) {
+                        error('Pull request is not mergeable!')
+                    }
                 }
             }
         }
