@@ -1,4 +1,4 @@
-def environments = env.BRANCH_NAME === 'master' ? 'Staging\nLive' : 'Staging'
+def environments = env.BRANCH_NAME == 'master' ? 'Staging\nLive' : 'Staging'
 
 pipeline {
     agent any
