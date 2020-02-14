@@ -1,27 +1,15 @@
-def buildEnvironments = env.BRANCH_NAME == 'master' ? '[\'Staging\', \'Live\']' : '[\'Staging\']'
+def buildEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
 
-properties(
-    [
-        parameters([
-            [
-                $class: 'ChoiceParameter',
-                choiceType: 'PT_CHECKBOX',
-                description: 'Environments to build',
-                filterable: false,
-                name: 'ENVIRONMENTS',
-                randomName: 'choice-parameter-24339734020414409',
-                script: [
-                    $class: 'GroovyScript',
-                    script: [
-                        classpath: [],
-                        sandbox: true,
-                        script: "return $buildEnvironments"
-                    ]
-                ]
-            ]
-        ])
-    ]
-)
+properties([
+    parameters([
+        extendedChoice(
+            description: 'Environments to build',
+            name: 'ENVIRONMENTS',
+            type: 'PT_CHECKBOX',
+            value: buildEnvironments
+        )
+    ])
+])
 
 pipeline {
     agent any
