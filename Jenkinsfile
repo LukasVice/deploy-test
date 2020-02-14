@@ -20,11 +20,11 @@ pipeline {
         stage('check') {
             steps {
                 script {
-                    def mergeable = sh(
-                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$CHANGE_ID -t | awk \\\"/^\\\\.mergeable\\\\t/ { print \\\\\\\$2 }\\\"\"",
+                    def mergeableState = sh(
+                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$CHANGE_ID -t | awk \\\"/^\\\\.mergeable_state\\\\t/ { print \\\\\\\$2 }\\\"\"",
                         returnStdout: true
                     )
-                    if (!mergeable.toBoolean()) {
+                    if (mergeableState != 'clean') {
                         error('Pull request is not mergeable!')
                     }
                 }
