@@ -13,7 +13,7 @@ properties(
                     script: [
                         classpath: [],
                         sandbox: true,
-                        script: 'return env.BRANCH_NAME == \'master\' ? [\'Staging\', \'Live\'] : [\'Staging\']']
+                        script: 'return env.BRANCH_NAME == \'master\' ? [\'Staging\', \'Live\'] : [\'Staging\']'
                     ]
                 ]
             ]
