@@ -9,14 +9,7 @@ pipeline {
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
-        activeChoiceParam('States') {
-            description('Select a state option')
-            filterable()
-            choiceType('SINGLE_SELECT')
-            groovyScript
-
-            { script('["Sao Paulo", "Rio de Janeiro", "Parana:selected", "Acre"]') fallbackScript('return ["ERROR"]') }
-        }
+        activeChoiceParam(name: 'States', choiceType: 'SINGLE_SELECT')
     }
 
     environment {
