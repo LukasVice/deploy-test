@@ -17,7 +17,10 @@ pipeline {
     }
 
     stages {
-        stage('check') {
+        stage('Check PR mergeability') {
+            when {
+                expression { env.CHANGE_ID != null }
+            }
             steps {
                 script {
                     def mergeableState = sh(
