@@ -25,7 +25,7 @@ pipeline {
                         returnStdout: true
                     )
                     if (mergeableState != 'clean') {
-                        error("Pull request is not mergeable! (State: '$mergeableState', should be 'clean')")
+                        error("Pull request is not mergeable! (State: '${mergeableState}', should be 'clean')")
                     }
                 }
             }
