@@ -1,4 +1,4 @@
-def environments = env.BRANCH_NAME == 'master' ? 'Staging\nLive' : 'Staging'
+properties([parameters([[$class: 'ChoiceParameter', choiceType: 'PT_MULTI_SELECT', description: '', filterLength: 1, filterable: false, name: 'ENVIRONMENT', randomName: 'choice-parameter-24339734020414409', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: true, script: 'return [\'One\', \'Two\']']]]]), gitLabConnection('GitLab'), [$class: 'JiraProjectProperty']])
 
 pipeline {
     agent any
@@ -8,18 +8,9 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    script {
-        echo "Hallo"
-    }
-
     parameters {
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
         booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
-        choice(
-            name: 'ENVIRONMENTS',
-            description: 'Environments',
-            choices: "${environments}"
-        )
     }
 
     environment {
