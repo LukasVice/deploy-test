@@ -1,4 +1,4 @@
-def list = '[\'Staging\', \'Live\']'
+def buildEnvironments = env.BRANCH_NAME == 'master' ? '[\'Staging\', \'Live\']' : '[\'Staging\']'
 
 properties(
     [
@@ -15,7 +15,7 @@ properties(
                     script: [
                         classpath: [],
                         sandbox: true,
-                        script: "return $list"
+                        script: "return $buildEnvironments"
                     ]
                 ]
             ]
