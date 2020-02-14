@@ -1,4 +1,25 @@
-properties([parameters([[$class: 'ChoiceParameter', choiceType: 'PT_MULTI_SELECT', description: '', filterLength: 1, filterable: false, name: 'ENVIRONMENT', randomName: 'choice-parameter-24339734020414409', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: true, script: 'return [\'One\', \'Two\']']]]]), gitLabConnection('GitLab'), [$class: 'JiraProjectProperty']])
+properties(
+    [
+        parameters([
+            [
+                $class: 'ChoiceParameter',
+                choiceType: 'PT_CHECKBOX',
+                description: 'Environments to build',
+                filterable: false,
+                name: 'ENVIRONMENTS',
+                randomName: 'choice-parameter-24339734020414409',
+                script: [
+                    $class: 'GroovyScript',
+                    script: [
+                        classpath: [],
+                        sandbox: true,
+                        script: 'return env.BRANCH_NAME == \'master\' ? [\'Staging\', \'Live\'] : [\'Staging\']']
+                    ]
+                ]
+            ]
+        ])
+    ]
+)
 
 pipeline {
     agent any
@@ -6,11 +27,6 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds()
-    }
-
-    parameters {
-        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
-        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
     }
 
     environment {
