@@ -9,7 +9,7 @@ pipeline {
     }
 
     parameters {
-        extendedChoice(name: 'DEPLOY_TOx', type: 'PT_CHECKBOX', value: deployEnvironments)
+        extendedChoice(name: 'DEPLOY_TO', type: 'PT_CHECKBOX', value: deployEnvironments)
     }
 
     environment {
