@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    parameters {
+        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_STAGING')
+        booleanParam(defaultValue: false, description: '', name: 'DEPLOY_MASTER')
+    }
+    
+    stages {
+        stage('build') {
+            steps {
+                sh 'echo Success'
+            }
+        }
+    }
+}
