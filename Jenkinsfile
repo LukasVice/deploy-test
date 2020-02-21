@@ -25,20 +25,20 @@ pipeline {
         stage('Info') {
             steps {
                 script {
-                    def prId = sh(
+                    PR_ID = sh(
                         script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
                         returnStdout: true
                     ).trim()
-                    echo "PR: ${prId}"
+                    echo "PR: ${PR_ID}"
                 }
                 echo "Branch Name: ${env.BRANCH_NAME}"
                 echo "Deploy To: ${env.DEPLOY_TO}"
-                echo "PR: ${prId}"
+                echo "PR: ${PR_ID}"
             }
         }
         stage('Build') {
             steps {
-                echo "PR: ${prId}"
+                echo "PR: ${PR_ID}"
                 echo "Execute build."
             }
         }
