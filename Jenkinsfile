@@ -1,4 +1,4 @@
-def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING,GOG'
+def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
 
 pipeline {
     agent any
