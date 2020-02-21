@@ -1,4 +1,4 @@
-def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING,GOG'
+def deployEnvironments = env.BRANCH_NAME == 'master' ? 'STAGING,LIVE' : 'STAGING'
 
 pipeline {
     agent any
@@ -17,30 +17,14 @@ pipeline {
     }
 
     stages {
-        stage('Build-Requirements') {
+        stage('Build requirements') {
             steps {
                 sh 'docker build -t github-hub:latest docker/hub'
             }
         }
-        stage('Info') {
-            when {
-                expression { env.CHANGE_ID == null }
-            }
-            steps {
-                echo "Branch Name: ${env.BRANCH_NAME}"
-                echo "Deploy To: ${env.DEPLOY_TO}"
-                script {
-                    env.PR_ID = sh(
-                        script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
-                        returnStdout: true
-                    ).trim()
-                }
-                echo "PR: ${env.PR_ID}"
-            }
-        }
         stage('Build') {
             steps {
-                echo "-------- BUILD (${env.PR_ID})"
+                echo "-------- BUILD"
             }
         }
         stage('Test') {
@@ -53,12 +37,16 @@ pipeline {
         }
         stage('Check PR mergeability') {
             when {
-                expression { env.PR_ID != null }
+                expression { env.CHANGE_ID == null && env.BRANCH_NAME != 'master' }
             }
             steps {
                 script {
+                    def PR_ID = sh(
+                        script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
+                        returnStdout: true
+                    ).trim()
                     def mergeableState = sh(
-                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$PR_ID -t | awk \\\"/^\\\\.mergeable_state\\\\t/ { print \\\\\\\$2 }\\\"\"",
+                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh github-hub:latest -c \"hub api repos/{owner}/{repo}/pulls/$PR_ID -t | awk \\\"/^\\\\.mergeable_state\\\\t/ { print \\\\\\\$2 }\\\"\"",
                         returnStdout: true
                     ).trim()
                     if (mergeableState != 'clean' && mergeableState != 'unstable') {
@@ -69,14 +57,10 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                allOf {
-                    expression { env.DEPLOY_TO != null }
-                    expression { env.PR_ID != null }
-                }
+                expression { env.DEPLOY_TO != '' && env.CHANGE_ID == null }
             }
             steps {
-                echo "PR: ${PR_ID}"
-                echo "Execute build."
+                echo "-------- DEPLOY"
             }
         }
     }
