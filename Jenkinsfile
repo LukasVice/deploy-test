@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Info') {
             when {
-                expression { env.CHANGE_ID == null }
+                expression { env.CHANGE_ID == null && env.BRANCH_NAME != 'master' }
             }
             steps {
                 echo "Branch Name: ${env.BRANCH_NAME}"
@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo "-------- BUILD (${env.PR_ID})"
+                echo "-------- BUILD"
             }
         }
         stage('Test') {
@@ -69,14 +69,12 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                allOf {
-                    expression { env.DEPLOY_TO != null }
-                    expression { env.PR_ID != null }
-                }
+                expression { env.DEPLOY_TO != null && (env.PR_ID != null || env.BRANCH_NAME == 'master') }
             }
             steps {
-                echo "PR: ${PR_ID}"
-                echo "Execute build."
+                echo "-------- DEPLOY"
+                echo "PR ID: ${env.PR_ID}"
+                echo "Branch: ${env.BRANCH_NAME}"
             }
         }
     }
