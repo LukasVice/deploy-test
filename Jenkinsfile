@@ -24,6 +24,7 @@ pipeline {
         }
         stage('Info') {
             steps {
+                echo "Change ID: ${CHANGE_ID}"
                 echo "Branch Name: ${env.BRANCH_NAME}"
                 echo "Deploy To: ${env.DEPLOY_TO}"
                 script {
