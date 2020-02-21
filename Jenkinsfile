@@ -27,8 +27,8 @@ pipeline {
                 expression { env.CHANGE_ID == null }
             }
             steps {
-                echo "Branch Name: ${BRANCH_NAME}"
-                echo "Deploy To: ${DEPLOY_TO}"
+                echo "Branch Name: ${env.BRANCH_NAME}"
+                echo "Deploy To: ${env.DEPLOY_TO}"
                 script {
                     env.PR_ID = sh(
                         script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
