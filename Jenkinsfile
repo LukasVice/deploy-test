@@ -23,8 +23,10 @@ pipeline {
             }
         }
         stage('Info') {
+            when {
+                expression { env.CHANGE_ID == null }
+            }
             steps {
-                echo "Change ID: ${CHANGE_ID}"
                 echo "Branch Name: ${env.BRANCH_NAME}"
                 echo "Deploy To: ${env.DEPLOY_TO}"
                 script {
@@ -44,7 +46,6 @@ pipeline {
         stage('Test') {
             when {
                 allOf {
-                    expression { env.DEPLOY_TO == null }
                     expression { env.CHANGE_ID != null }
                 }
             }
@@ -55,7 +56,6 @@ pipeline {
         stage('Check PR mergeability') {
             when {
                 allOf {
-                    expression { env.DEPLOY_TO != null }
                     expression { env.PR_ID != null }
                 }
             }
