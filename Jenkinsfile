@@ -45,9 +45,7 @@ pipeline {
         }
         stage('Test') {
             when {
-                allOf {
-                    expression { env.CHANGE_ID != null }
-                }
+                expression { env.CHANGE_ID != null }
             }
             steps {
                 echo "-------- TEST"
@@ -55,9 +53,7 @@ pipeline {
         }
         stage('Check PR mergeability') {
             when {
-                allOf {
-                    expression { env.PR_ID != null }
-                }
+                expression { env.PR_ID != null }
             }
             steps {
                 script {
