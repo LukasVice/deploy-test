@@ -69,7 +69,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                expression { env.DEPLOY_TO != null && (env.PR_ID != null || env.BRANCH_NAME == 'master') }
+                expression { env.DEPLOY_TO != '' && (env.PR_ID != null || env.BRANCH_NAME == 'master') }
             }
             steps {
                 echo "-------- DEPLOY"
