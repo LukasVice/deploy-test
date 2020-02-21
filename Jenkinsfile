@@ -17,7 +17,7 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Build-Requirements') {
             steps {
                 sh 'docker build -t github-hub:latest docker/hub'
             }
