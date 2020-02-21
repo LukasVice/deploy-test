@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo "-------- BUILD"
+                echo "-------- BUILD (${PR_ID})"
             }
         }
         stage('Test') {
