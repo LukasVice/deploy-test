@@ -53,7 +53,7 @@ pipeline {
         }
         stage('Check PR mergeability') {
             when {
-                expression { env.PR_ID != null }
+                expression { PR_ID != null }
             }
             steps {
                 script {
