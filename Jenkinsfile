@@ -17,9 +17,19 @@ pipeline {
     }
 
     stages {
+        stage('Build') {
+            steps {
+                echo "${env}"
+                echo "${env.DEPLOY_TO}"
+                echo "Execute build."
+            }
+        }
         stage('Check PR mergeability') {
             when {
-                expression { env.CHANGE_ID != null }
+                allOf {
+                    expression { env.DEPLOY_TO != null }
+                    expression { env.CHANGE_ID != null }
+                }
             }
             steps {
                 script {
