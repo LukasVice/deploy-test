@@ -24,28 +24,28 @@ pipeline {
         }
         stage('Info') {
             when {
-                expression { CHANGE_ID == null }
+                expression { env.CHANGE_ID == null }
             }
             steps {
                 echo "Branch Name: ${BRANCH_NAME}"
                 echo "Deploy To: ${DEPLOY_TO}"
                 script {
-                    PR_ID = sh(
+                    env.PR_ID = sh(
                         script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
                         returnStdout: true
                     ).trim()
                 }
-                echo "PR: ${PR_ID}"
+                echo "PR: ${env.PR_ID}"
             }
         }
         stage('Build') {
             steps {
-                echo "-------- BUILD (${PR_ID})"
+                echo "-------- BUILD (${env.PR_ID})"
             }
         }
         stage('Test') {
             when {
-                expression { CHANGE_ID != null }
+                expression { env.CHANGE_ID != null }
             }
             steps {
                 echo "-------- TEST"
@@ -53,7 +53,7 @@ pipeline {
         }
         stage('Check PR mergeability') {
             when {
-                expression { PR_ID != null }
+                expression { env.PR_ID != null }
             }
             steps {
                 script {
@@ -70,8 +70,8 @@ pipeline {
         stage('Deploy') {
             when {
                 allOf {
-                    expression { DEPLOY_TO != null }
-                    expression { PR_ID != null }
+                    expression { env.DEPLOY_TO != null }
+                    expression { env.PR_ID != null }
                 }
             }
             steps {
