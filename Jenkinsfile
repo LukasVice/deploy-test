@@ -17,10 +17,21 @@ pipeline {
     }
 
     stages {
+        stage('Info') {
+            steps {
+                script {
+                    def prId = sh(
+                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub pr show -f %I\"",
+                        returnStdout: true
+                    ).trim()
+                    echo "PR: ${prId}"
+                }
+                echo "Branch Name: ${env.BRANCH_NAME}"
+                echo "Deploy To: ${env.DEPLOY_TO}"
+            }
+        }
         stage('Build') {
             steps {
-                echo "${env}"
-                echo "${env.DEPLOY_TO}"
                 echo "Execute build."
             }
         }
