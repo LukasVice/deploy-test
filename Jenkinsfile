@@ -24,11 +24,11 @@ pipeline {
         }
         stage('Info') {
             when {
-                expression { env.CHANGE_ID == null }
+                expression { CHANGE_ID == null }
             }
             steps {
-                echo "Branch Name: ${env.BRANCH_NAME}"
-                echo "Deploy To: ${env.DEPLOY_TO}"
+                echo "Branch Name: ${BRANCH_NAME}"
+                echo "Deploy To: ${DEPLOY_TO}"
                 script {
                     PR_ID = sh(
                         script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
@@ -45,7 +45,7 @@ pipeline {
         }
         stage('Test') {
             when {
-                expression { env.CHANGE_ID != null }
+                expression { CHANGE_ID != null }
             }
             steps {
                 echo "-------- TEST"
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 script {
                     def mergeableState = sh(
-                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$CHANGE_ID -t | awk \\\"/^\\\\.mergeable_state\\\\t/ { print \\\\\\\$2 }\\\"\"",
+                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub api repos/{owner}/{repo}/pulls/$PR_ID -t | awk \\\"/^\\\\.mergeable_state\\\\t/ { print \\\\\\\$2 }\\\"\"",
                         returnStdout: true
                     ).trim()
                     if (mergeableState != 'clean') {
@@ -70,8 +70,8 @@ pipeline {
         stage('Deploy') {
             when {
                 allOf {
-                    expression { env.DEPLOY_TO != null }
-                    expression { env.PR_ID != null }
+                    expression { DEPLOY_TO != null }
+                    expression { PR_ID != null }
                 }
             }
             steps {
