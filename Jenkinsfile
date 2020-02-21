@@ -17,11 +17,16 @@ pipeline {
     }
 
     stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t github-hub:latest docker/hub'
+            }
+        }
         stage('Info') {
             steps {
                 script {
                     def prId = sh(
-                        script: "docker run --rm -v \$(pwd):/src -w /src -e GITHUB_TOKEN --entrypoint /bin/sh abergmeier/hub:2.12.8 -c \"hub pr show -f %I\"",
+                        script: "docker run --rm -v \$(pwd):/src -e GITHUB_TOKEN github-hub:latest pr show -f %I",
                         returnStdout: true
                     ).trim()
                     echo "PR: ${prId}"
@@ -35,6 +40,7 @@ pipeline {
                 echo "Execute build."
             }
         }
+        /*
         stage('Check PR mergeability') {
             when {
                 allOf {
@@ -54,5 +60,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
