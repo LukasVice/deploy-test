@@ -33,10 +33,12 @@ pipeline {
                 }
                 echo "Branch Name: ${env.BRANCH_NAME}"
                 echo "Deploy To: ${env.DEPLOY_TO}"
+                echo "PR: ${prId}"
             }
         }
         stage('Build') {
             steps {
+                echo "PR: ${prId}"
                 echo "Execute build."
             }
         }
